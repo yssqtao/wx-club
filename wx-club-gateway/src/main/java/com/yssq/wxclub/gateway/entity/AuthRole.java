@@ -7,9 +7,6 @@ import java.util.Date;
 
 /**
  * (AuthRole)实体类
- *
- * @author makejava
- * @since 2023-11-02 23:55:19
  */
 @Data
 public class AuthRole implements Serializable {

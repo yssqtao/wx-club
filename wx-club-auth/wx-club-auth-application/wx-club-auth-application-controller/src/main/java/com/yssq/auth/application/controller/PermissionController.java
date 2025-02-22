@@ -7,7 +7,6 @@ import com.yssq.auth.common.entity.Result;
 import com.yssq.auth.domain.bo.AuthPermissionBO;
 import com.yssq.auth.domain.service.AuthPermissionDomainService;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -85,7 +84,7 @@ public class PermissionController {
     public Result<Boolean> getPermission(String userName) {
         try {
             log.info("PermissionController.getPermission.userName:{}", userName);
-            Assert.notNull(!StringUtils.isBlank(userName), "用户id不能为空");
+            Assert.notNull(userName, "用户id不能为空");
             return Result.ok(authPermissionDomainService.getPermission(userName));
         } catch (Exception e) {
             log.error("PermissionController.getPermission.error:{}", e.getMessage(), e);

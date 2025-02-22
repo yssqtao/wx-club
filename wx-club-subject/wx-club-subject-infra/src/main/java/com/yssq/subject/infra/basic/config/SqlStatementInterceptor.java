@@ -1,3 +1,4 @@
+/*
 package com.yssq.subject.infra.basic.config;
 
 import org.apache.ibatis.cache.CacheKey;
@@ -49,4 +50,4 @@ public class SqlStatementInterceptor implements Interceptor {
     public void setProperties(Properties properties) {
 
     }
-}
+}*/

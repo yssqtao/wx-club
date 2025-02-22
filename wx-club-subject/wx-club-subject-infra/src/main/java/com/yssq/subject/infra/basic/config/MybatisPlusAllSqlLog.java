@@ -1,3 +1,4 @@
+/*
 package com.yssq.subject.infra.basic.config;
 
 import com.baomidou.mybatisplus.extension.plugins.inner.InnerInterceptor;
@@ -112,4 +113,4 @@ public class MybatisPlusAllSqlLog implements InnerInterceptor {
         }
         return value;
     }
-}
+}*/

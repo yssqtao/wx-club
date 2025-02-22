@@ -5,6 +5,7 @@ import com.yssq.subject.common.enums.ResultCodeEnum;
 import com.yssq.subject.domain.bo.SubjectCategoryBO;
 import com.yssq.subject.domain.convert.SubjectCategoryBOConverter;
 import com.yssq.subject.domain.service.SubjectCategoryDomainService;
+import com.yssq.subject.infra.basic.config.MyMetaObjectHandler;
 import com.yssq.subject.infra.basic.entity.SubjectCategory;
 import com.yssq.subject.infra.basic.mapper.SubjectCategoryDao;
 import com.yssq.subject.infra.basic.service.SubjectCategoryService;
@@ -25,6 +26,9 @@ public class SubjectCategoryDomainServiceImpl implements SubjectCategoryDomainSe
 
     @Resource
     private SubjectCategoryService subjectCategoryService;
+
+    @Resource
+    private MyMetaObjectHandler myMetaObjectHandler;
 
     @Override
     public void add(SubjectCategoryBO subjectCategoryBO) {

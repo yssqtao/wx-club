@@ -8,6 +8,7 @@ import com.yssq.subject.common.entity.Result;
 import com.yssq.subject.common.util.LoginUtil;
 import com.yssq.subject.domain.bo.SubjectCategoryBO;
 import com.yssq.subject.domain.service.SubjectCategoryDomainService;
+import com.yssq.subject.infra.basic.config.MyMetaObjectHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
@@ -37,9 +38,11 @@ public class SubjectCategoryController {
                 log.info("SubjectCategoryController.add.dto:{}", JSON.toJSONString(subjectCategoryDTO));
             }
             String loginId = LoginUtil.getLoginId();
+            log.info("当前登录id为：{}",loginId);
             Assert.notNull(subjectCategoryDTO.getCategoryName(), "分类名称不能为空");
             Assert.notNull(subjectCategoryDTO.getCategoryType(), "分类类型不能为空");
             SubjectCategoryBO subjectCategoryBO = SubjectCategoryDTOConverter.INSTANCE.ConvertDTO2BO(subjectCategoryDTO);
+
             subjectCategoryDomainService.add(subjectCategoryBO);
             return Result.ok(true);
         } catch (Exception e) {

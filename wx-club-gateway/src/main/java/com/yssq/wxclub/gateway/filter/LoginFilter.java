@@ -24,7 +24,10 @@ public class LoginFilter implements GlobalFilter {
     @Override
     @SneakyThrows
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
-        // TODO 前端请求，第一处
+        /**
+         * TODO 前端请求，第一处，先经过网关的全局拦截器
+         * 拦截器进行token解析，获取用户id并将其填充到loginId
+         */
         ServerHttpRequest request = exchange.getRequest();
         ServerHttpResponse response = exchange.getResponse();
         ServerHttpRequest.Builder mutate = request.mutate();

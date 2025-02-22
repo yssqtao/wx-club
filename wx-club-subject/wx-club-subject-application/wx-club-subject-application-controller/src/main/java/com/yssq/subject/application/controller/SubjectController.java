@@ -13,7 +13,9 @@ import com.yssq.subject.domain.bo.SubjectInfoBO;
 import com.yssq.subject.domain.bo.SubjectLabelBO;
 import com.yssq.subject.domain.service.SubjectInfoDomainService;
 import com.yssq.subject.domain.service.SubjectLabelDomainService;
+import com.yssq.subject.infra.basic.es.entity.SubjectInfoEs;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 
@@ -98,6 +100,43 @@ public class SubjectController {
         } catch (Exception e) {
             log.error("SubjectController.querySubjectInfo.error:{}", e.getMessage(), e);
             return Result.fail("查询题目详情失败");
+        }
+    }
+
+    /**
+     * ES全文检索，并实现高亮显示
+     */
+    @PostMapping("/getSubjectPageBySearch")
+    public Result<PageResult<SubjectInfoEs>> getSubjectPageBySearch(@RequestBody SubjectInfoDTO subjectInfoDTO) {
+        try {
+            if (log.isInfoEnabled()) {
+                log.info("SubjectController.getSubjectPageBySearch.dto:{}", JSON.toJSONString(subjectInfoDTO));
+            }
+            Assert.notNull(subjectInfoDTO.getKeyWord(),"关键词不能为空" );
+            SubjectInfoBO subjectInfoBO = SubjectInfoDTOConverter.INSTANCE.ConvertDTO2BO(subjectInfoDTO);
+            subjectInfoBO.setPageNo(subjectInfoDTO.getPageNo());
+            subjectInfoBO.setPageSize(subjectInfoDTO.getPageSize());
+            PageResult<SubjectInfoEs> boPageResult = subjectInfoDomainService.getSubjectPageBySearch(subjectInfoBO);
+            return Result.ok(boPageResult);
+        } catch (Exception e) {
+            log.error("SubjectCategoryController.getSubjectPageBySearch.error:{}", e.getMessage(), e);
+            return Result.fail("全文检索失败");
+        }
+    }
+
+    /**
+     * 获取题目贡献榜
+     * 访问
+     */
+    @PostMapping("/getContributeList")
+    public Result<List<SubjectInfoDTO>> getContributeList() {
+        try {
+            List<SubjectInfoBO> subjectInfoBOList = subjectInfoDomainService.getContributeList();
+            List<SubjectInfoDTO> subjectInfoDTOList = SubjectInfoDTOConverter.INSTANCE.ConvertBOList2DTOList(subjectInfoBOList);
+            return Result.ok(subjectInfoDTOList);
+        } catch (Exception e) {
+            log.error("SubjectCategoryController.getContributeList.error:{}", e.getMessage(), e);
+            return Result.fail("获取贡献榜失败");
         }
     }
 }

@@ -1,36 +1,40 @@
 package com.yssq.subject.domain.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.yssq.subject.common.entity.PageResult;
 import com.yssq.subject.common.enums.IsDeletedFlagEnum;
+import com.yssq.subject.common.util.IdWorkerUtil;
+import com.yssq.subject.common.util.LoginUtil;
 import com.yssq.subject.domain.bo.SubjectInfoBO;
 import com.yssq.subject.domain.bo.SubjectOptionBO;
 import com.yssq.subject.domain.convert.SubjectInfoBOConverter;
 import com.yssq.subject.domain.handler.subject.SubjectTypeHandler;
 import com.yssq.subject.domain.handler.subject.SubjectTypeHandlerFactory;
+import com.yssq.subject.domain.redis.RedisUtil;
 import com.yssq.subject.domain.service.SubjectInfoDomainService;
 import com.yssq.subject.infra.basic.entity.SubjectInfo;
 import com.yssq.subject.infra.basic.entity.SubjectLabel;
 import com.yssq.subject.infra.basic.entity.SubjectMapping;
+import com.yssq.subject.infra.basic.es.entity.SubjectInfoEs;
 import com.yssq.subject.infra.basic.mapper.SubjectInfoDao;
-import com.yssq.subject.infra.basic.service.SubjectInfoService;
-import com.yssq.subject.infra.basic.service.SubjectLabelService;
-import com.yssq.subject.infra.basic.service.SubjectMappingService;
-import com.yssq.subject.infra.basic.service.SubjectMultipleService;
+import com.yssq.subject.infra.basic.service.*;
+import com.yssq.subject.infra.rpc.UserInfo;
+import com.yssq.subject.infra.rpc.UserRpc;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
  * 题目信息表(SubjectInfo)表服务实现类
- *
- * @author makejava
- * @since 2025-02-18 14:51:07
  */
 @Service
+@Slf4j
 public class SubjectInfoDomainServiceImpl implements SubjectInfoDomainService {
 
     @Resource
@@ -44,6 +48,17 @@ public class SubjectInfoDomainServiceImpl implements SubjectInfoDomainService {
 
     @Resource
     private SubjectLabelService subjectLabelService;
+
+    @Resource
+    private SubjectEsService subjectEsService;
+
+    @Resource
+    private RedisUtil redisUtil;
+
+    private static final String RANK_KEY = "subject_rank";
+
+    @Resource
+    private UserRpc userRpc;
 
     @Override
     @Transactional(rollbackFor = Exception.class) //对于多表操作，加上事务注解
@@ -86,6 +101,18 @@ public class SubjectInfoDomainServiceImpl implements SubjectInfoDomainService {
                 .collect(Collectors.toList());
 
         subjectMappingService.batchInsert(mappingList);
+        //TODO 插入数据库之后，同步到es，此业务插入到es不成功
+        SubjectInfoEs subjectInfoEs = new SubjectInfoEs();
+        subjectInfoEs.setDocId(new IdWorkerUtil(1, 1, 1).nextId());
+        subjectInfoEs.setSubjectId(subjectInfo.getId());
+        subjectInfoEs.setSubjectAnswer(subjectInfoBO.getSubjectAnswer());
+        subjectInfoEs.setCreateTime(new Date().getTime());
+        subjectInfoEs.setCreateUser("鸡翅");
+        subjectInfoEs.setSubjectName(subjectInfo.getSubjectName());
+        subjectInfoEs.setSubjectType(subjectInfo.getSubjectType());
+        subjectEsService.insert(subjectInfoEs);
+        //TODO 实现排行榜时，这里需要通过redis放入zadd计入排行榜
+        redisUtil.addScore(RANK_KEY, LoginUtil.getLoginId(), 1);
     }
 
     @Override
@@ -162,5 +189,39 @@ public class SubjectInfoDomainServiceImpl implements SubjectInfoDomainService {
         List<String> labelNameList = labelList.stream().map(SubjectLabel::getLabelName).collect(Collectors.toList());
         bo.setLabelName(labelNameList);
         return bo;
+    }
+
+    @Override
+    public PageResult<SubjectInfoEs> getSubjectPageBySearch(SubjectInfoBO subjectInfoBO) {
+        SubjectInfoEs subjectInfoEs = new SubjectInfoEs();
+        subjectInfoEs.setPageNo(subjectInfoBO.getPageNo());
+        subjectInfoEs.setPageSize(subjectInfoBO.getPageSize());
+        subjectInfoEs.setKeyWord(subjectInfoBO.getKeyWord());
+        return subjectEsService.querySubjectList(subjectInfoEs);
+    }
+
+    @Override
+    public List<SubjectInfoBO> getContributeList() {
+        //传统的实现
+        //List<SubjectInfo> subjectInfoList = subjectInfoService.getContributeCount();
+
+        //基于redis的zset实现
+        Set<ZSetOperations.TypedTuple<String>> typedTuples = redisUtil.rankWithScore(RANK_KEY, 0, 5);
+        if (log.isInfoEnabled()) {
+            log.info("getContributeList.typedTuples:{}", JSON.toJSONString(typedTuples));
+        }
+        if (CollectionUtils.isEmpty(typedTuples)) {
+            return Collections.emptyList();
+        }
+        List<SubjectInfoBO> subjectInfoBOList = new LinkedList<>();
+        typedTuples.forEach((rank -> {
+            SubjectInfoBO subjectInfoBO = new SubjectInfoBO();
+            subjectInfoBO.setSubjectCount(rank.getScore().intValue());
+            UserInfo userInfo = userRpc.getUserInfo(rank.getValue());
+            subjectInfoBO.setCreateUser(userInfo.getNickName());
+            subjectInfoBO.setCreateUserAvatar(userInfo.getAvatar());
+            subjectInfoBOList.add(subjectInfoBO);
+        }));
+        return subjectInfoBOList;
     }
 }

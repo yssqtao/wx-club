@@ -1,4 +1,4 @@
-package com.yssq.auth.application.context;
+package com.yssq.auth.common.context;
 
 import java.util.Map;
 import java.util.Objects;

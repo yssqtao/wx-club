@@ -10,7 +10,7 @@ import javax.annotation.Generated;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-02-20T16:41:09+0800",
+    date = "2025-02-22T15:06:38+0800",
     comments = "version: 1.4.2.Final, compiler: javac, environment: Java 1.8.0_421 (Oracle Corporation)"
 )
 public class SubjectInfoDTOConverterImpl implements SubjectInfoDTOConverter {
@@ -41,12 +41,21 @@ public class SubjectInfoDTOConverterImpl implements SubjectInfoDTOConverter {
             subjectInfoBO.setLabelIds( new ArrayList<Integer>( list1 ) );
         }
         subjectInfoBO.setOptionList( subjectAnswerDTOListToSubjectAnswerBOList( subjectInfoDTO.getOptionList() ) );
+        subjectInfoBO.setSubjectAnswer( subjectInfoDTO.getSubjectAnswer() );
         List<String> list3 = subjectInfoDTO.getLabelName();
         if ( list3 != null ) {
             subjectInfoBO.setLabelName( new ArrayList<String>( list3 ) );
         }
         subjectInfoBO.setCategoryId( subjectInfoDTO.getCategoryId() );
         subjectInfoBO.setLabelId( subjectInfoDTO.getLabelId() );
+        subjectInfoBO.setKeyWord( subjectInfoDTO.getKeyWord() );
+        subjectInfoBO.setCreateUser( subjectInfoDTO.getCreateUser() );
+        subjectInfoBO.setCreateUserAvatar( subjectInfoDTO.getCreateUserAvatar() );
+        subjectInfoBO.setSubjectCount( subjectInfoDTO.getSubjectCount() );
+        subjectInfoBO.setLiked( subjectInfoDTO.getLiked() );
+        subjectInfoBO.setLikedCount( subjectInfoDTO.getLikedCount() );
+        subjectInfoBO.setNextSubjectId( subjectInfoDTO.getNextSubjectId() );
+        subjectInfoBO.setLastSubjectId( subjectInfoDTO.getLastSubjectId() );
 
         return subjectInfoBO;
     }
@@ -82,6 +91,7 @@ public class SubjectInfoDTOConverterImpl implements SubjectInfoDTOConverter {
         subjectInfoDTO.setSubjectType( subjectInfoBO.getSubjectType() );
         subjectInfoDTO.setSubjectScore( subjectInfoBO.getSubjectScore() );
         subjectInfoDTO.setSubjectParse( subjectInfoBO.getSubjectParse() );
+        subjectInfoDTO.setSubjectAnswer( subjectInfoBO.getSubjectAnswer() );
         List<Integer> list = subjectInfoBO.getCategoryIds();
         if ( list != null ) {
             subjectInfoDTO.setCategoryIds( new ArrayList<Integer>( list ) );
@@ -95,8 +105,16 @@ public class SubjectInfoDTOConverterImpl implements SubjectInfoDTOConverter {
         if ( list3 != null ) {
             subjectInfoDTO.setLabelName( new ArrayList<String>( list3 ) );
         }
+        subjectInfoDTO.setKeyWord( subjectInfoBO.getKeyWord() );
         subjectInfoDTO.setCategoryId( subjectInfoBO.getCategoryId() );
         subjectInfoDTO.setLabelId( subjectInfoBO.getLabelId() );
+        subjectInfoDTO.setCreateUser( subjectInfoBO.getCreateUser() );
+        subjectInfoDTO.setCreateUserAvatar( subjectInfoBO.getCreateUserAvatar() );
+        subjectInfoDTO.setSubjectCount( subjectInfoBO.getSubjectCount() );
+        subjectInfoDTO.setLiked( subjectInfoBO.getLiked() );
+        subjectInfoDTO.setLikedCount( subjectInfoBO.getLikedCount() );
+        subjectInfoDTO.setNextSubjectId( subjectInfoBO.getNextSubjectId() );
+        subjectInfoDTO.setLastSubjectId( subjectInfoBO.getLastSubjectId() );
 
         return subjectInfoDTO;
     }

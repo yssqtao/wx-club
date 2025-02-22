@@ -3,7 +3,6 @@ package com.yssq.subject.infra.rpc;
 import com.yssq.auth.api.UserFeignService;
 import com.yssq.auth.entity.AuthUserDTO;
 import com.yssq.auth.entity.Result;
-import com.yssq.subject.infra.entity.UserInfo;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;

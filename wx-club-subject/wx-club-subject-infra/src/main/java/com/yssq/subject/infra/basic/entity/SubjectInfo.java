@@ -1,5 +1,7 @@
 package com.yssq.subject.infra.basic.entity;
 
+import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.Data;
 
 import java.util.Date;
@@ -45,18 +47,22 @@ public class SubjectInfo implements Serializable {
     /**
      * 创建人
      */
+    @TableField(fill = FieldFill.INSERT)
     private String createdBy;
     /**
      * 创建时间
      */
+    @TableField(fill = FieldFill.INSERT)
     private Date createdTime;
     /**
      * 修改人
      */
+    @TableField(fill = FieldFill.INSERT_UPDATE)
     private String updateBy;
     /**
      * 修改时间
      */
+    @TableField(fill = FieldFill.INSERT_UPDATE)
     private Date updateTime;
 
     private Integer isDeleted;

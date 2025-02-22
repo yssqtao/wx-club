@@ -80,6 +80,7 @@ public class AuthUserDomainServiceImpl implements AuthUserDomainService {
         authUserRole.setIsDeleted(IsDeletedFlagEnum.UN_DELETED.getCode());
         //将关联关系插入到数据库中
         authUserRoleService.insert(authUserRole);
+
         //TODO 缓存用户角色到redis
         //生成key，格式为 auth.role.<username>
         String roleKey = redisUtil.buildKey(authRolePrefix, authUser.getUserName());
@@ -102,6 +103,7 @@ public class AuthUserDomainServiceImpl implements AuthUserDomainService {
         List<AuthPermission> permissionList = authPermissionService.queryByRoleList(permissionIdList);
         String permissionKey = redisUtil.buildKey(authPermissionPrefix, authUser.getUserName());
         redisUtil.set(permissionKey, new Gson().toJson(permissionList));
+
         return count > 0;
     }
 

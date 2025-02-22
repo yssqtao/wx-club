@@ -1,6 +1,6 @@
 package com.yssq.auth.application.interceptor;
 
-import com.yssq.auth.application.context.LoginContextHolder;
+import com.yssq.auth.common.context.LoginContextHolder;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.lang.Nullable;
 import org.springframework.web.servlet.HandlerInterceptor;

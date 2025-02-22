@@ -1,4 +1,4 @@
-package com.yssq.subject.infra.entity;
+package com.yssq.subject.infra.rpc;
 
 import lombok.Data;
 

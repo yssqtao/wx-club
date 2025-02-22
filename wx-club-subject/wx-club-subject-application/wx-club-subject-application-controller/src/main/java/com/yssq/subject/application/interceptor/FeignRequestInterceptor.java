@@ -18,7 +18,7 @@ public class FeignRequestInterceptor implements RequestInterceptor {
 
     @Override
     public void apply(RequestTemplate requestTemplate) {
-        //TODO 前端请求，第三处
+        // TODO 前端请求，第三处（如果是微服务之间的调用，此时经过Feign拦截器）
         ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         HttpServletRequest request = requestAttributes.getRequest();
         if (Objects.nonNull(request)) {

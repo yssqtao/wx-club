@@ -1,3 +1,4 @@
+/*
 package com.yssq.subject.infra.basic.config;
 
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
@@ -13,3 +14,4 @@ public class MybatisConfiguration {
         return mybatisPlusInterceptor;
     }
 }
+*/

@@ -10,9 +10,7 @@ import com.yssq.auth.common.entity.Result;
 import com.yssq.auth.domain.bo.AuthUserBO;
 import com.yssq.auth.domain.service.AuthUserDomainService;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.Assert;
-import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;

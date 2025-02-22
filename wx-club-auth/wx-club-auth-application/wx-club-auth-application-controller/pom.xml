@@ -29,12 +29,14 @@
             <artifactId>wx-club-auth-domain</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
+        <!--api 模块-->
         <dependency>
             <groupId>com.yssq</groupId>
             <artifactId>wx-club-auth-api</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
         <!-- Sa-Token 权限认证，在线文档：https://sa-token.cc -->
+        <!--这个依赖与结合redis的satoken 依赖不一样-->
         <dependency>
             <groupId>cn.dev33</groupId>
             <artifactId>sa-token-spring-boot-starter</artifactId>
