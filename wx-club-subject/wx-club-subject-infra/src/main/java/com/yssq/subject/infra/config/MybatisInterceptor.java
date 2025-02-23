@@ -1,5 +1,4 @@
-/*
-package com.yssq.subject.infra.basic.config;
+package com.yssq.subject.infra.config;
 
 import com.yssq.subject.common.util.LoginUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -137,4 +136,3 @@ public class MybatisInterceptor implements Interceptor {
     public void setProperties(Properties properties) {
     }
 }
-*/

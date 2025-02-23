@@ -1,14 +1,12 @@
 package com.yssq.subject.application.controller;
 
 import com.alibaba.fastjson.JSON;
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import com.yssq.subject.application.convert.SubjectCategoryDTOConverter;
 import com.yssq.subject.application.dto.SubjectCategoryDTO;
 import com.yssq.subject.common.entity.Result;
 import com.yssq.subject.common.util.LoginUtil;
 import com.yssq.subject.domain.bo.SubjectCategoryBO;
 import com.yssq.subject.domain.service.SubjectCategoryDomainService;
-import com.yssq.subject.infra.basic.config.MyMetaObjectHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
@@ -23,7 +21,6 @@ import java.util.List;
 public class SubjectCategoryController {
     @Resource
     private SubjectCategoryDomainService subjectCategoryDomainService;
-
 
     /**
      * 新增分类

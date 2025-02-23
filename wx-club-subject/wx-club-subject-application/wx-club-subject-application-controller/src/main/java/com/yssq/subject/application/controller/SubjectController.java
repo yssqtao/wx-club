@@ -126,7 +126,6 @@ public class SubjectController {
 
     /**
      * 获取题目贡献榜
-     * 访问
      */
     @PostMapping("/getContributeList")
     public Result<List<SubjectInfoDTO>> getContributeList() {

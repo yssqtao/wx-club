@@ -20,6 +20,10 @@ public class LoginInterceptor implements HandlerInterceptor {
      */
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+        //每次访问微服务，查看请求路径是什么
+        String requestURI = request.getRequestURI();
+        System.out.println("拦截的请求路径: " + requestURI);
+
         String loginId = request.getHeader("loginId");
         if (StringUtils.isNotBlank(loginId)) {
             LoginContextHolder.set("loginId", loginId);

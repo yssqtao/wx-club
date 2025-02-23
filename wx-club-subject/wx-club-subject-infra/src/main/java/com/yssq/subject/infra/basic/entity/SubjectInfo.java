@@ -67,6 +67,10 @@ public class SubjectInfo implements Serializable {
 
     private Integer isDeleted;
 
+    /**
+     * 此处对数据库表有一些污染，因为这是数据库表不存在的字段
+     */
+    private Integer subjectCount;
 
 }
 

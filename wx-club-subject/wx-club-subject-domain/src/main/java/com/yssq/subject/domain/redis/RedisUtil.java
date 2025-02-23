@@ -113,6 +113,9 @@ public class RedisUtil {
         return set;
     }
 
+    /**
+     * 题目点赞方法封装
+     */
     public void putHash(String key, String hashKey, Object hashVal) {
         redisTemplate.opsForHash().put(key, hashKey, hashVal);
     }

@@ -1,4 +1,5 @@
-package com.yssq.subject.infra.basic.config;
+/*
+package com.yssq.subject.infra.config;
 
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import com.yssq.subject.common.context.LoginContextHolder;
@@ -8,6 +9,7 @@ import org.apache.ibatis.reflection.MetaObject;
 import org.springframework.stereotype.Component;
 import java.util.Date;
 
+//自定义填充公共字段，需要继承 BaseMapper
 
 @Component
 @Slf4j
@@ -19,10 +21,8 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
     private static final String CREATE_USER = "createBy";
     private static final String UPDATE_USER = "updateBy";
 
+    // 插入操作，自动填充
 
-    /**
-     * 插入操作，自动填充
-     */
     @Override
     public void insertFill(MetaObject metaObject) {
         log.info("当前用户登录id: {}", LoginContextHolder.getLoginId());
@@ -40,9 +40,8 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
         this.strictInsertFill(metaObject, UPDATE_USER, String.class, loginId);
     }
 
-    /**
-     * 更新操作，自动填充
-     */
+    //更新操作，自动填充
+
     @Override
     public void updateFill(MetaObject metaObject) {
         log.info("当前用户登录id: {}", LoginContextHolder.getLoginId());
@@ -56,9 +55,8 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
         this.strictUpdateFill(metaObject, UPDATE_USER, String.class, loginId);
     }
 
-    /**
-     * 获取当前登录用户 ID
-     */
+    //获取当前登录用户 ID
+
     private String getCurrentLoginId() {
         String loginId = LoginContextHolder.getLoginId();
         if (StringUtils.isBlank(loginId)) {
@@ -70,3 +68,4 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
 }
 
 
+*/

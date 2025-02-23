@@ -12,6 +12,7 @@ import com.yssq.subject.domain.handler.subject.SubjectTypeHandler;
 import com.yssq.subject.domain.handler.subject.SubjectTypeHandlerFactory;
 import com.yssq.subject.domain.redis.RedisUtil;
 import com.yssq.subject.domain.service.SubjectInfoDomainService;
+import com.yssq.subject.domain.service.SubjectLikedDomainService;
 import com.yssq.subject.infra.basic.entity.SubjectInfo;
 import com.yssq.subject.infra.basic.entity.SubjectLabel;
 import com.yssq.subject.infra.basic.entity.SubjectMapping;
@@ -51,6 +52,8 @@ public class SubjectInfoDomainServiceImpl implements SubjectInfoDomainService {
 
     @Resource
     private SubjectEsService subjectEsService;
+    @Resource
+    private SubjectLikedDomainService subjectLikedDomainService;
 
     @Resource
     private RedisUtil redisUtil;
@@ -188,7 +191,24 @@ public class SubjectInfoDomainServiceImpl implements SubjectInfoDomainService {
         List<SubjectLabel> labelList = subjectLabelService.batchQueryById(labelIdList);
         List<String> labelNameList = labelList.stream().map(SubjectLabel::getLabelName).collect(Collectors.toList());
         bo.setLabelName(labelNameList);
+        //查询题目是否被点赞过
+        bo.setLiked(subjectLikedDomainService.isLiked(subjectInfoBO.getId().toString(), LoginUtil.getLoginId()));
+        bo.setLikedCount(subjectLikedDomainService.getLikedCount(subjectInfoBO.getId().toString()));
+        assembleSubjectCursor(subjectInfoBO, bo);
         return bo;
+    }
+
+    private void assembleSubjectCursor(SubjectInfoBO subjectInfoBO, SubjectInfoBO bo) {
+        Long categoryId = subjectInfoBO.getCategoryId();
+        Long labelId = subjectInfoBO.getLabelId();
+        Long subjectId = subjectInfoBO.getId();
+        if (Objects.isNull(categoryId) || Objects.isNull(labelId)) {
+            return;
+        }
+        Long nextSubjectId = subjectInfoService.querySubjectIdCursor(subjectId, categoryId, labelId, 1);
+        bo.setNextSubjectId(nextSubjectId);
+        Long lastSubjectId = subjectInfoService.querySubjectIdCursor(subjectId, categoryId, labelId, 0);
+        bo.setLastSubjectId(lastSubjectId);
     }
 
     @Override
@@ -202,8 +222,8 @@ public class SubjectInfoDomainServiceImpl implements SubjectInfoDomainService {
 
     @Override
     public List<SubjectInfoBO> getContributeList() {
-        //传统的实现
-        //List<SubjectInfo> subjectInfoList = subjectInfoService.getContributeCount();
+//        传统的实现
+//        List<SubjectInfo> subjectInfoList = subjectInfoService.getContributeCount();
 
         //基于redis的zset实现
         Set<ZSetOperations.TypedTuple<String>> typedTuples = redisUtil.rankWithScore(RANK_KEY, 0, 5);

@@ -16,16 +16,7 @@ import java.util.List;
 /**
  * mvc的全局处理
  */
-/*@Configuration
-public class GlobalConfig extends WebMvcConfigurationSupport {
 
-    @Override
-    protected void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new LoginInterceptor())
-                .addPathPatterns("/**")
-                .excludePathPatterns("/user/doLogin/**");
-    }
-}*/
 @Configuration
 public class GlobalConfig implements WebMvcConfigurer {
 
